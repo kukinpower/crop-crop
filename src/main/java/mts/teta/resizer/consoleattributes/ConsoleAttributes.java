@@ -1,8 +1,9 @@
-package mts.teta.resizer;
+package mts.teta.resizer.consoleattributes;
 
+import java.io.File;
 import picocli.CommandLine;
 
-public class ConsoleAttributes {
+public abstract class ConsoleAttributes {
 
   private static final String APP_NAME = "resizer";
   private static final String VERSION = APP_NAME + " 0.0.1";
@@ -30,6 +31,9 @@ public class ConsoleAttributes {
   private static final String FORMAT_PARAMS = "\"outputFormat\"";
   private static final String FORMAT_DESCRIPTION = "the image format type";
 
+  private static final String INPUT_FILE_ARG_PARAM = "input-file";
+  private static final String OUTPUT_FILE_ARG_PARAM = "output-file";
+
   private static final String HELP = String.join(System.lineSeparator(),
       "Version: " + VERSION + " " + GITHUB_LINK,
       DESCRIPTION,
@@ -55,20 +59,42 @@ public class ConsoleAttributes {
       description = DESCRIPTION,
       headerHeading = HEADER_HEADING)
 
-  @CommandLine.Option(names = RESIZE_OPTION, paramLabel = RESIZE_PARAMS, description = RESIZE_DESCRIPTION)
-  protected Integer[] resize = new Integer[2];
+  @CommandLine.Parameters(paramLabel = INPUT_FILE_ARG_PARAM, description = INPUT_FILE_ARG_PARAM)
+  protected File inputFile;
+
+  @CommandLine.Parameters(paramLabel = OUTPUT_FILE_ARG_PARAM, description = OUTPUT_FILE_ARG_PARAM)
+  private File outputFile;
+
+  @CommandLine.Option(names = RESIZE_OPTION, paramLabel = RESIZE_PARAMS, description = RESIZE_DESCRIPTION, split = " ")
+  private final Integer[] resize = new Integer[2];
 
   @CommandLine.Option(names = QUALITY_OPTION, paramLabel = QUALITY_PARAMS, description = QUALITY_DESCRIPTION)
-  protected Integer quality;
+  private Integer quality;
 
-  @CommandLine.Option(names = CROP_OPTION, paramLabel = CROP_PARAMS, description = CROP_DESCRIPTION)
-  protected Integer[] crop = new Integer[4];
+  @CommandLine.Option(names = CROP_OPTION, paramLabel = CROP_PARAMS, description = CROP_DESCRIPTION, split = " ")
+  private final Integer[] crop = new Integer[4];
 
   @CommandLine.Option(names = BLUR_OPTION, paramLabel = BLUR_PARAMS, description = BLUR_DESCRIPTION)
   private Integer blurRadius;
 
   @CommandLine.Option(names = FORMAT_OPTION, paramLabel = FORMAT_PARAMS, description = FORMAT_DESCRIPTION)
   private String outputFormat;
+
+  public void setInputFile(File file) {
+    inputFile = file;
+  }
+
+  public void setOutputFile(File file) {
+    outputFile = file;
+  }
+
+  public File getInputFile() {
+    return inputFile;
+  }
+
+  public File getOutputFile() {
+    return outputFile;
+  }
 
   public Integer getResizeWidth() {
     return resize[0];
@@ -140,9 +166,5 @@ public class ConsoleAttributes {
 
   public void setOutputFormat(String outputFormat) {
     this.outputFormat = outputFormat;
-  }
-
-  public static void main(String[] args) {
-    new ConsoleAttributes().printHelp();
   }
 }

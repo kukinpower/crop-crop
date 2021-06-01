@@ -1,4 +1,4 @@
-package mts.teta.resizer.imageprocessor;
+package mts.teta.resizer.exception;
 
 public class BadAttributesException extends Exception{
     public BadAttributesException(String errorMessage) {
